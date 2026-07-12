@@ -1,0 +1,4 @@
+{
+  "expectRuleIds": ["security.secret-like-value-added"],
+  "riskLevelAtLeast": "moderate"
+}

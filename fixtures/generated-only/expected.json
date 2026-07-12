@@ -1,0 +1,5 @@
+{
+  "expectRuleIds": [],
+  "forbidRuleIds": ["testing.source-changed-without-tests"],
+  "riskLevelAtMost": "low"
+}

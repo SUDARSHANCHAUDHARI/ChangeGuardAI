@@ -1,0 +1,64 @@
+# ChangeGuard AI — pull-request analysis workflow (example)
+#
+# Drop this into .github/workflows/ in your repository. It runs ChangeGuard
+# against each pull request, uploads the reports as an artifact, and fails the
+# check when the configured risk threshold is exceeded.
+#
+# ChangeGuard only READS the pull request (metadata + changed files). It does
+# not post comments or modify anything on GitHub in this version.
+name: ChangeGuard AI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Least-privilege: read the repo and PR contents only.
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  changeguard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for accurate diffs)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # Until `changeguard` is published to npm, install it however you vendor
+      # it (global npm install shown here). AI is disabled by default, so no
+      # model server or API key is required.
+      - name: Install ChangeGuard
+        run: npm install -g changeguard
+
+      - name: Run ChangeGuard on the pull request
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          changeguard analyze \
+            --pr "${{ github.event.pull_request.number }}" \
+            --no-ai \
+            --format markdown \
+            --fail-on high | tee changeguard-report.md
+
+      - name: Upload ChangeGuard reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: changeguard-reports
+          path: |
+            .changeguard/
+            changeguard-report.md
+          if-no-files-found: warn

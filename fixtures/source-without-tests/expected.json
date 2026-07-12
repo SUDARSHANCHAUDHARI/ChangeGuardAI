@@ -1,0 +1,4 @@
+{
+  "expectRuleIds": ["testing.source-changed-without-tests"],
+  "riskLevelAtMost": "moderate"
+}

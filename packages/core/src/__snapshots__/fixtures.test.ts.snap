@@ -1,0 +1,106 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`fixtures > golden Markdown report for authorization-removed is stable 1`] = `
+"# ChangeGuard AI Report
+
+Risk: Critical — 79/100
+
+Recommendation: Block
+
+## Change Summary
+
+- 1 file(s) changed: 0 added, 1 modified, 0 deleted, 0 renamed
+- +0 / −1 lines
+
+## Risk Breakdown
+
+| Points | Reason | Source |
+| ---: | --- | --- |
+| +36 | 2 high findings | findings |
+| +8 | 1 medium finding | findings |
+| +20 | Authorization-related file changed | files |
+| +15 | Source changed without related tests | findings |
+
+## Changed Files
+
+| File | Status | Category | +/− |
+| --- | --- | --- | --- |
+| src/permissions/roles.ts | modified | authorization | +0/−1 |
+
+## Affected Areas
+
+- authorization
+
+## Findings
+
+### HIGH (2)
+
+#### Auth change without negative tests
+
+- File: \`src/permissions/roles.ts\`
+- Rule: \`testing.auth-change-without-negative-tests\`
+- Category: testing
+- Confidence: 0.70 · Source: rule
+- Auth-related code changed but no test asserts the denied/unauthorized path.
+- Evidence:
+
+  \`\`\`
+  src/permissions/roles.ts
+  \`\`\`
+
+- Recommendation: Add negative tests asserting 401/403 and denied-permission behavior.
+
+#### Authorization check removed
+
+- File: \`src/permissions/roles.ts:2\`
+- Rule: \`security.authorization-check-removed\`
+- Category: security
+- Confidence: 0.55 · Source: rule
+- An authorization/permission guard appears to have been deleted from this file.
+- Evidence:
+
+  \`\`\`
+  authorize(req);
+  \`\`\`
+
+- Recommendation: Confirm the authorization check was intentionally moved or replaced, and add a negative test.
+
+### MEDIUM (1)
+
+#### Source changed without tests
+
+- File: \`src/permissions/roles.ts\`
+- Rule: \`testing.source-changed-without-tests\`
+- Category: testing
+- Confidence: 0.80 · Source: rule
+- 1 source file(s) changed but no test files were added or modified.
+- Evidence:
+
+  \`\`\`
+  src/permissions/roles.ts
+  \`\`\`
+
+- Recommendation: Add or update tests covering the changed behavior.
+
+
+## Test Gaps & Plan
+
+1 file(s) changed across: authorization. 3 finding(s) inform the scenarios below.
+
+- **[high] Application builds and boots after the change** (smoke)
+- **[critical] Access is denied for unauthenticated and unauthorized requests** (negative)
+- **[critical] Security: verify each flagged risk is mitigated** (security)
+
+## Unknowns
+
+- Test coverage gaps were detected — see testing.* findings.
+
+## Metadata
+
+- Repository root: \`/repo\`
+- Base branch: \`main\`
+- Current branch: \`feature\`
+- Languages: typescript
+- Generated at: 2026-01-01T00:00:00.000Z
+"
+`;

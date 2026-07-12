@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+.DS_Store
+*.log
+
+# ChangeGuard generated output
+.changeguard/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+local.properties

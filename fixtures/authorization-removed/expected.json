@@ -1,0 +1,7 @@
+{
+  "expectRuleIds": [
+    "security.authorization-check-removed",
+    "testing.source-changed-without-tests"
+  ],
+  "riskLevelAtLeast": "high"
+}

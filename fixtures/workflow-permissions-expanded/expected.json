@@ -1,0 +1,4 @@
+{
+  "expectRuleIds": ["security.github-workflow-permissions-expanded"],
+  "riskLevelAtLeast": "moderate"
+}

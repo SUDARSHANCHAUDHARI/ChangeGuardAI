@@ -1,0 +1,10 @@
+diff --git a/src/permissions/roles.ts b/src/permissions/roles.ts
+index 1111111..2222222 100644
+--- a/src/permissions/roles.ts
++++ b/src/permissions/roles.ts
+@@ -1,6 +1,5 @@
+ export function handler(req, res) {
+-  authorize(req);
+   const data = loadData();
+   return res.json(data);
+ }

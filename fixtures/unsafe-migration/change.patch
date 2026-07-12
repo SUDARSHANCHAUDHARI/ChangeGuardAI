@@ -1,0 +1,8 @@
+diff --git a/db/migrations/003_drop_users.sql b/db/migrations/003_drop_users.sql
+new file mode 100644
+index 0000000..4444444
+--- /dev/null
++++ b/db/migrations/003_drop_users.sql
+@@ -0,0 +1,2 @@
++DROP TABLE users;
++ALTER TABLE orders ADD COLUMN status TEXT NOT NULL;

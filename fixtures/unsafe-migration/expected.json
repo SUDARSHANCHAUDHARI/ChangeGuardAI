@@ -1,0 +1,8 @@
+{
+  "expectRuleIds": [
+    "database.table-dropped",
+    "database.destructive-migration",
+    "database.non-null-column-without-default"
+  ],
+  "riskLevelAtLeast": "high"
+}
