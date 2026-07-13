@@ -118,6 +118,9 @@ export const securityRules: ChangeGuardRule[] = [
     description: "A shell/command execution call was introduced, a potential injection sink.",
     category: "security",
     severity: "high",
+    // Not on test files: tests legitimately spawn processes (git init, running
+    // the CLI under test) and flagging those is noise, not injection risk.
+    only: (f) => f.category !== "test",
     // Negative lookbehind on the bare calls so method calls like
     // `regex.exec(...)` or `arr.spawn(...)` do NOT match — only bare
     // `exec(`/`spawn(` (typically from child_process) and explicit
@@ -127,7 +130,7 @@ export const securityRules: ChangeGuardRule[] = [
     recommendation: "Avoid shell execution with untrusted input; prefer argument arrays and validate inputs.",
     confidence: 0.5,
     limitations:
-      LIMIT_TEXTUAL + " Matches bare exec/spawn calls and explicit child_process usage; ignores method calls like regex.exec().",
+      LIMIT_TEXTUAL + " Matches bare exec/spawn calls and explicit child_process usage; skips test files and ignores method calls like regex.exec().",
   }),
   addedLineRule({
     id: "security.raw-sql-added",

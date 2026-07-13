@@ -93,6 +93,18 @@ describe("deterministic rules", () => {
     expect(noHits).toHaveLength(0);
   });
 
+  it("does not flag command execution in test files", async () => {
+    // Tests legitimately spawn processes (found via dogfooding on CodeMesh).
+    const patch = `@@ -0,0 +1 @@\n+execFileSync("git", ["init"], { cwd });`;
+    const inTest = await runOne("security.command-execution-added", [
+      mkFile("tests/setup.test.mjs", "test", patch)
+    ]);
+    expect(inTest).toHaveLength(0);
+    // …but the same call in production source is still flagged.
+    const inSrc = await runOne("security.command-execution-added", [mkFile("src/runner.ts", "source", patch)]);
+    expect(inSrc).toHaveLength(1);
+  });
+
   it("flags source changed without tests", async () => {
     const patch = `@@ -0,0 +1 @@\n+export const x = 1;`;
     const findings = await runOne("testing.source-changed-without-tests", [
