@@ -228,6 +228,12 @@ pnpm test
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/architecture.md`](docs/architecture.md).
 
+## Author
+
+Built by **Sudarshan Chaudhari** ([@SUDARSHANCHAUDHARI](https://github.com/SUDARSHANCHAUDHARI)) — SudarshanTechLabs.
+
+Contributions welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT © 2026 Sudarshan Chaudhari (SudarshanTechLabs) — see [LICENSE](LICENSE).
