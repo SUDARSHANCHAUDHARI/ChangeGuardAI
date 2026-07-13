@@ -75,12 +75,18 @@ export {
   type DiffLineType
 } from "./rules/patch.js";
 
-// GitHub (read-only)
+// GitHub (read for analysis; a single opt-in comment write via `review --post`)
 export {
   fetchPullRequest,
   type PullRequestRef,
   type PullRequestData
 } from "./github/pr.js";
+export {
+  renderPrComment,
+  postPrComment,
+  REVIEW_MARKER,
+  type PostReviewResult
+} from "./github/review.js";
 
 // Risk
 export { scoreRisk, type RiskInput } from "./risk-engine/risk.js";

@@ -31,11 +31,27 @@ git clone <this-repo> changeguard-ai
 cd changeguard-ai
 pnpm install
 pnpm build
-# run the built CLI
+# run the built CLI directly
 node apps/cli/dist/index.js --help
 ```
 
-Publishing to npm (so `npm i -g changeguard` works) is on the roadmap.
+### Make `changeguard` a bare command
+
+Until it's published to npm, link the built binary onto your `PATH`:
+
+```bash
+# option A — pnpm global link (run `pnpm setup` once if prompted)
+cd apps/cli && pnpm link --global
+
+# option B — npm global link
+cd apps/cli && npm link
+
+# option C — symlink into any PATH dir you own (no profile changes)
+ln -sf "$PWD/apps/cli/dist/index.js" ~/bin/changeguard   # or ~/.local/bin
+```
+
+Then `changeguard --help` works from any repository. Publishing to npm (so
+`npm i -g changeguard` works out of the box) is on the roadmap.
 
 ## Quick start
 
@@ -60,6 +76,7 @@ threshold.
 | `changeguard risk` | Print only the deterministic risk score/breakdown |
 | `changeguard test-plan` | Generate the deterministic test plan |
 | `changeguard report` | Write the full report set to `.changeguard/` |
+| `changeguard review` | Analyze a GitHub PR and produce a review comment (dry run by default; `--post` publishes one sticky comment) |
 | `changeguard rules list` | List all built-in rules |
 | `changeguard rules test` | Run rules against the current diff (authoring/debug) |
 
@@ -71,6 +88,8 @@ changeguard analyze --base main --head feature/login
 changeguard analyze --commits abc123..def456
 changeguard analyze --diff ./change.patch
 changeguard analyze --pr 123            # read-only GitHub PR (needs GITHUB_TOKEN)
+changeguard review --pr 123             # print the PR review comment (dry run)
+changeguard review --pr 123 --post      # publish/update one sticky PR comment
 changeguard analyze --staged            # staged changes
 changeguard analyze --working           # working tree vs HEAD
 ```
@@ -184,7 +203,9 @@ the check on high risk.
   rule documents its own limitations (`changeguard rules list`). ChangeGuard
   deliberately prefers false negatives over noisy false positives.
 - Untracked files are not included in working-tree diffs.
-- GitHub support is **read-only** (no comments or status writes yet).
+- GitHub is **read-only for analysis**. The only write is `changeguard review
+  --post`, which upserts a single sticky PR comment on explicit request (no
+  reviews, labels, or status checks).
 - Tree-sitter is abstracted but not bundled; the MVP works without it.
 
 ## Roadmap
