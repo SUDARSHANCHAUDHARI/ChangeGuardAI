@@ -31,11 +31,27 @@ git clone <this-repo> changeguard-ai
 cd changeguard-ai
 pnpm install
 pnpm build
-# run the built CLI
+# run the built CLI directly
 node apps/cli/dist/index.js --help
 ```
 
-Publishing to npm (so `npm i -g changeguard` works) is on the roadmap.
+### Make `changeguard` a bare command
+
+Until it's published to npm, link the built binary onto your `PATH`:
+
+```bash
+# option A — pnpm global link (run `pnpm setup` once if prompted)
+cd apps/cli && pnpm link --global
+
+# option B — npm global link
+cd apps/cli && npm link
+
+# option C — symlink into any PATH dir you own (no profile changes)
+ln -sf "$PWD/apps/cli/dist/index.js" ~/bin/changeguard   # or ~/.local/bin
+```
+
+Then `changeguard --help` works from any repository. Publishing to npm (so
+`npm i -g changeguard` works out of the box) is on the roadmap.
 
 ## Quick start
 
