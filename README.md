@@ -60,6 +60,7 @@ threshold.
 | `changeguard risk` | Print only the deterministic risk score/breakdown |
 | `changeguard test-plan` | Generate the deterministic test plan |
 | `changeguard report` | Write the full report set to `.changeguard/` |
+| `changeguard review` | Analyze a GitHub PR and produce a review comment (dry run by default; `--post` publishes one sticky comment) |
 | `changeguard rules list` | List all built-in rules |
 | `changeguard rules test` | Run rules against the current diff (authoring/debug) |
 
@@ -71,6 +72,8 @@ changeguard analyze --base main --head feature/login
 changeguard analyze --commits abc123..def456
 changeguard analyze --diff ./change.patch
 changeguard analyze --pr 123            # read-only GitHub PR (needs GITHUB_TOKEN)
+changeguard review --pr 123             # print the PR review comment (dry run)
+changeguard review --pr 123 --post      # publish/update one sticky PR comment
 changeguard analyze --staged            # staged changes
 changeguard analyze --working           # working tree vs HEAD
 ```
@@ -184,7 +187,9 @@ the check on high risk.
   rule documents its own limitations (`changeguard rules list`). ChangeGuard
   deliberately prefers false negatives over noisy false positives.
 - Untracked files are not included in working-tree diffs.
-- GitHub support is **read-only** (no comments or status writes yet).
+- GitHub is **read-only for analysis**. The only write is `changeguard review
+  --post`, which upserts a single sticky PR comment on explicit request (no
+  reviews, labels, or status checks).
 - Tree-sitter is abstracted but not bundled; the MVP works without it.
 
 ## Roadmap

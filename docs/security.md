@@ -45,10 +45,15 @@ dedup collision; only extra context is merged from an AI duplicate.
 
 ## GitHub access
 
-`--pr` is **read-only**: it reads PR metadata and changed files via the REST API
-using `GITHUB_TOKEN`. ChangeGuard does not post comments, labels, reviews, or
-status checks in this version. The example workflow requests least-privilege
-(`contents: read`, `pull-requests: read`).
+Analysis is **read-only**: `--pr` reads PR metadata and changed files via the
+REST API using `GITHUB_TOKEN`.
+
+The **only** GitHub write is `changeguard review --post`, and only when that flag
+is explicitly passed. It upserts a single sticky PR comment (matched by a hidden
+marker so it never posts duplicates) and touches nothing else — no reviews,
+labels, or status checks. Posting needs `pull-requests: write`; plain analysis
+and `review` (dry run) need only read scopes. The example workflow requests
+least-privilege read scopes.
 
 ## Reporting a vulnerability
 

@@ -8,6 +8,7 @@ import { runAnalyze, type AnalyzeOptions } from "./commands/analyze.js";
 import { runRisk } from "./commands/risk.js";
 import { runTestPlan } from "./commands/test-plan.js";
 import { runReport } from "./commands/report.js";
+import { runReview, type ReviewOptions } from "./commands/review.js";
 import { runRulesList, runRulesTest, type RulesTestOptions } from "./commands/rules.js";
 import type { SourceOptions } from "./resolve-source.js";
 import type { AnalyzeCliOptions } from "./run-analysis.js";
@@ -114,6 +115,14 @@ withSourceOptions(program.command("report").description("Write the full report s
   .option("--no-ai", "disable AI analysis (deterministic rules only)")
   .action(async (opts: AnalyzeCliOptions, command: Command) => {
     await guard(command, async (flags) => runReport(await createContext(flags), opts));
+  });
+
+withSourceOptions(program.command("review").description("Analyze a GitHub PR and produce a review comment (dry run by default)"))
+  .option("--post", "publish/update the sticky comment on the PR (needs GITHUB_TOKEN)")
+  .option("--fail-on <level>", "exit non-zero when risk >= level (low|moderate|high|critical)")
+  .option("--no-ai", "disable AI analysis (deterministic rules only)")
+  .action(async (opts: ReviewOptions, command: Command) => {
+    await guard(command, async (flags) => runReview(await createContext(flags), opts));
   });
 
 const rules = program.command("rules").description("Inspect and test the rule set");
