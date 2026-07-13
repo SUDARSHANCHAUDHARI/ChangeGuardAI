@@ -118,10 +118,16 @@ export const securityRules: ChangeGuardRule[] = [
     description: "A shell/command execution call was introduced, a potential injection sink.",
     category: "security",
     severity: "high",
-    pattern: /\b(child_process|exec\(|execSync\(|spawn\(|spawnSync\(|os\.system\(|subprocess\.(call|run|Popen))/,
+    // Negative lookbehind on the bare calls so method calls like
+    // `regex.exec(...)` or `arr.spawn(...)` do NOT match — only bare
+    // `exec(`/`spawn(` (typically from child_process) and explicit
+    // child_process/os.system/subprocess usage do.
+    pattern:
+      /\b(child_process|(?<![.\w])(exec|execSync|spawn|spawnSync|execFile|execFileSync)\(|os\.system\(|subprocess\.(call|run|Popen))/,
     recommendation: "Avoid shell execution with untrusted input; prefer argument arrays and validate inputs.",
     confidence: 0.5,
-    limitations: LIMIT_TEXTUAL
+    limitations:
+      LIMIT_TEXTUAL + " Matches bare exec/spawn calls and explicit child_process usage; ignores method calls like regex.exec().",
   }),
   addedLineRule({
     id: "security.raw-sql-added",
