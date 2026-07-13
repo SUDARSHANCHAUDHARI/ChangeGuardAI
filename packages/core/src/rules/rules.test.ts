@@ -82,6 +82,17 @@ describe("deterministic rules", () => {
     expect(findings).toHaveLength(1);
   });
 
+  it("flags real command execution but not regex .exec()", async () => {
+    const realExec = `@@ -0,0 +1,2 @@\n+import { execSync } from "child_process";\n+execSync(cmd);`;
+    const hits = await runOne("security.command-execution-added", [mkFile("src/run.ts", "source", realExec)]);
+    expect(hits.length).toBeGreaterThanOrEqual(1);
+
+    // Method calls like regex.exec() must NOT be flagged as command execution.
+    const regexExec = `@@ -0,0 +1 @@\n+const m = ROUTE_RE.exec(line);`;
+    const noHits = await runOne("security.command-execution-added", [mkFile("src/parse.ts", "source", regexExec)]);
+    expect(noHits).toHaveLength(0);
+  });
+
   it("flags source changed without tests", async () => {
     const patch = `@@ -0,0 +1 @@\n+export const x = 1;`;
     const findings = await runOne("testing.source-changed-without-tests", [
