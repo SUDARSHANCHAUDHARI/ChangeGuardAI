@@ -1,5 +1,11 @@
 # ChangeGuard AI
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/SUDARSHANCHAUDHARI/ChangeGuardAI?sort=semver)](https://github.com/SUDARSHANCHAUDHARI/ChangeGuardAI/releases)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6.svg)](https://www.typescriptlang.org)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 Analyze Git changes — branches, commits, working trees, patches, or GitHub pull
 requests — and get a deterministic report of **what changed, what it affects,
 what could break, whether tests were added, and a risk score**.
