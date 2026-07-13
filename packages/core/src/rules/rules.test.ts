@@ -94,7 +94,7 @@ describe("deterministic rules", () => {
   });
 
   it("does not flag command execution in test files", async () => {
-    // Tests legitimately spawn processes (found via dogfooding on CodeMesh).
+    // Tests legitimately spawn processes (found via dogfooding on a real repo).
     const patch = `@@ -0,0 +1 @@\n+execFileSync("git", ["init"], { cwd });`;
     const inTest = await runOne("security.command-execution-added", [
       mkFile("tests/setup.test.mjs", "test", patch)
