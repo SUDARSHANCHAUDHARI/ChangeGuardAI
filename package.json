@@ -5,7 +5,7 @@
   "description": "ChangeGuard AI — analyze Git changes and report risk, impact, and test gaps.",
   "license": "MIT",
   "type": "module",
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@10.34.9",
   "engines": {
     "node": ">=20"
   },
