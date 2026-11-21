@@ -7,8 +7,9 @@ A ready-to-use workflow lives in
 
 1. Checks out the repository with **full history** (`fetch-depth: 0`) so diffs
    are accurate on shallow-by-default CI checkouts.
-2. Installs Node.js 20 + pnpm.
-3. Installs the `changeguard` CLI.
+2. Installs Node.js 24 + pnpm.
+3. Builds the `changeguard` CLI from source at a pinned tag (it is not
+   published to npm yet, and the name is unclaimed there).
 4. Runs `changeguard analyze --pr <number> --no-ai --fail-on high`.
 5. Uploads `.changeguard/` reports as a workflow artifact (`always()`).
 6. Fails the check when risk is **high**+ or a critical security finding exists.
