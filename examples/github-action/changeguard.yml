@@ -22,32 +22,47 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout (full history for accurate diffs)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          persist-credentials: false
+
+      # `changeguard` is not published to npm and the name is unclaimed there,
+      # so never `npm install -g changeguard`: that would run a stranger's
+      # package with GITHUB_TOKEN in the environment. Build from source at a
+      # pinned tag instead, and bump the tag deliberately.
+      - name: Checkout ChangeGuard source
+        uses: actions/checkout@v7
+        with:
+          repository: SUDARSHANCHAUDHARI/ChangeGuardAI
+          ref: v0.1.5
+          path: .changeguard-tool
+          persist-credentials: false
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
+          cache-dependency-path: .changeguard-tool/pnpm-lock.yaml
 
-      # Until `changeguard` is published to npm, install it however you vendor
-      # it (global npm install shown here). AI is disabled by default, so no
-      # model server or API key is required.
-      - name: Install ChangeGuard
-        run: npm install -g changeguard
+      # AI is disabled by default, so no model server or API key is required.
+      - name: Build ChangeGuard
+        working-directory: .changeguard-tool
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
 
       - name: Run ChangeGuard on the pull request
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          changeguard analyze \
+          node .changeguard-tool/apps/cli/dist/index.js analyze \
             --pr "${{ github.event.pull_request.number }}" \
             --no-ai \
             --format markdown \
@@ -55,10 +70,12 @@ jobs:
 
       - name: Upload ChangeGuard reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: changeguard-reports
           path: |
             .changeguard/
             changeguard-report.md
           if-no-files-found: warn
+          # .changeguard/ is a dot-directory; upload-artifact skips those by default.
+          include-hidden-files: true
