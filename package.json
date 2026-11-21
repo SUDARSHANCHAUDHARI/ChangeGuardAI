@@ -2,7 +2,7 @@
   "name": "changeguard-ai",
   "version": "0.1.0",
   "private": true,
-  "description": "ChangeGuard AI — analyze Git changes and report risk, impact, and test gaps.",
+  "description": "ChangeGuard AI \u2014 analyze Git changes and report risk, impact, and test gaps.",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@10.34.9",
@@ -30,6 +30,13 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ]
+    ],
+    "overrides": {
+      "esbuild": "^0.28.2",
+      "js-yaml@4": "^4.3.2",
+      "postcss": "^8.5.33",
+      "source-map-js": "^1.2.4",
+      "brace-expansion@1": "^1.1.22"
+    }
   }
 }
