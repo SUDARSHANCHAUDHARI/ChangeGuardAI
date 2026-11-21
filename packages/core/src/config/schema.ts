@@ -32,14 +32,14 @@ export const configSchema = z.object({
         .array(z.string())
         .default(["**/*.test.{ts,tsx,js,jsx}", "**/*.spec.{ts,tsx,js,jsx}", "tests/**"])
     })
-    .default({}),
+    .prefault({}),
 
   risk: z
     .object({
       warnThreshold: z.number().min(0).max(100).default(40),
       failThreshold: z.number().min(0).max(100).default(70)
     })
-    .default({}),
+    .prefault({}),
 
   ai: z
     .object({
@@ -48,12 +48,12 @@ export const configSchema = z.object({
       required: z.boolean().default(false),
       provider: z.enum(["ollama", "openai", "mock"]).default("ollama"),
       model: z.string().optional(),
-      baseUrl: z.string().url().optional(),
+      baseUrl: z.url().optional(),
       maxFiles: z.number().int().positive().default(30),
       maxContextChars: z.number().int().positive().default(24000),
       minimumConfidence: z.number().min(0).max(1).default(0.7)
     })
-    .default({}),
+    .prefault({}),
 
   output: z
     .object({
@@ -62,7 +62,7 @@ export const configSchema = z.object({
       json: z.boolean().default(true),
       sarif: z.boolean().default(false)
     })
-    .default({})
+    .prefault({})
 });
 
 export type ChangeGuardConfig = z.infer<typeof configSchema>;
