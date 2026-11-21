@@ -115,7 +115,12 @@ export async function postPrComment(
     issue_number: ref.number,
     per_page: 100
   });
-  const mine = existing.find((c) => typeof c.body === "string" && c.body.includes(REVIEW_MARKER));
+  // Match on author too: anyone can paste the marker into a comment, and we
+  // must never overwrite (or be redirected to) someone else's comment.
+  const login = await authenticatedLogin(octokit);
+  const mine = existing.find(
+    (c) => c.user?.login === login && typeof c.body === "string" && c.body.startsWith(REVIEW_MARKER)
+  );
 
   if (mine !== undefined) {
     const res = await octokit.issues.updateComment({
@@ -134,4 +139,16 @@ export async function postPrComment(
     body
   });
   return { action: "created", commentId: res.data.id, url: res.data.html_url };
+}
+
+/**
+ * Login that owns the token. The Actions GITHUB_TOKEN cannot call /user, so it
+ * falls back to the identity Actions posts as.
+ */
+async function authenticatedLogin(octokit: Octokit): Promise<string> {
+  try {
+    return (await octokit.users.getAuthenticated()).data.login;
+  } catch {
+    return "github-actions[bot]";
+  }
 }
