@@ -93,6 +93,8 @@ async function resolveSpec(git: Git, source: DiffSource): Promise<ResolvedSpec> 
       };
     }
     case "commits":
+      // A leading "-" would be parsed by git as an option (e.g. --output=<file>).
+      if (source.range.startsWith("-")) throw new BaseBranchMissingError(source.range);
       return { args: [source.range], description: source.range };
     case "working":
       // Compare the working tree (staged + unstaged) against HEAD. Untracked
